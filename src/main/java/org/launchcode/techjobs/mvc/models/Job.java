@@ -30,6 +30,7 @@ public class Job {
     }
 
     // Custom toString method.
+    // the toString method formats the job postings and handles empty fields
     @Override
     public String toString(){
         String output = "";
@@ -61,10 +62,10 @@ public class Job {
     // Custom equals and hashCode methods. Two Job objects are "equal" when their id fields match.
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Job)) return false;
-        Job job = (Job) o;
-        return id == job.id;
+        if (this == o) return true; // if job o already exists return true
+        if (!(o instanceof Job)) return false; // if job o is not an instance of job class return false
+        Job job = (Job) o; // cast o as a job
+        return id == job.id; // return the job id for job o
     }
 
     @Override
