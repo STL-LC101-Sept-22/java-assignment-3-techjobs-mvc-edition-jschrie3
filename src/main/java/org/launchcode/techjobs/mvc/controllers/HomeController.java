@@ -13,6 +13,8 @@ import java.util.HashMap;
 @Controller
 public class HomeController {
 
+    // displays the home page navigation options for the app
+    // renders the index.html template
     @GetMapping(value = "")
     public String index(Model model) {
 

@@ -19,20 +19,26 @@ import java.util.List;
  */
 public class JobData {
 
+    // FIELDS
+    // read in data file
     private static final String DATA_FILE = "job_data.csv";
     private static boolean isDataLoaded = false;
 
+    // declare fields for jobs
     private static ArrayList<Job> allJobs;
     private static ArrayList<Employer> allEmployers = new ArrayList<>();
     private static ArrayList<Location> allLocations = new ArrayList<>();
     private static ArrayList<PositionType> allPositionTypes = new ArrayList<>();
     private static ArrayList<CoreCompetency> allCoreCompetency = new ArrayList<>();
 
+    // METHODS TO SEARCH FOR RESULTS
     /**
      * Fetch list of all job objects from loaded data,
      * without duplicates, then return a copy.
      */
 
+    // METHODS - FIND ALL JOBS
+    // load data into arraylist as Job objects names allJobs
     public static ArrayList<Job> findAll() {
 
         // load data, if not already loaded
@@ -42,6 +48,7 @@ public class JobData {
         return new ArrayList<>(allJobs);
     }
 
+    // METHODS - SEARCH BY FIELD AND SEARCH TERM
     /**
      * Returns the results of searching the Jobs data by field and search term.
      *
@@ -57,30 +64,48 @@ public class JobData {
         // load data, if not already loaded
         loadData();
 
+        // declare jobs arraylist to hold search results
         ArrayList<Job> jobs = new ArrayList<>();
 
+        // where value is the field to search for
+        // if value = all, call findAll
         if (value.toLowerCase().equals("all")){
             return findAll();
         }
 
+        // where column is the Job field to be searched
+        // where value is the field to search for
+        // if column = all, pass value into findByValue method to search jobs arrayList for value
         if (column.equals("all")){
             jobs = findByValue(value);
             return jobs;
         }
+
+        // for each job in allJobs arraylist
         for (Job job : allJobs) {
 
+            // initialize string aValue that calls getFieldValue method
+            // job (a Job object) and column (a String for fieldName) are passed in
             String aValue = getFieldValue(job, column);
 
+            // adds all the jobs meeting search criteria to jobs arraylist
             if (aValue != null && aValue.toLowerCase().contains(value.toLowerCase())) {
                 jobs.add(job);
             }
         }
 
+        // returns the jobs in jobs arraylist that meet the search criteria
         return jobs;
     }
 
+    // METHODS TO RETURN RESULTS
+    // METHODS - RETURNS SEARCH RESULTS FOR SEARCH BY FIELD AND SEARCH TERM (ABOVE)
     public static String getFieldValue(Job job, String fieldName){
+
+        // initialize a string to hold the job data that meets search criteria
         String theValue;
+
+        // uses fieldName to determine which fields from job object to return
         if (fieldName.equals("name")){
             theValue = job.getName();
         } else if (fieldName.equals("employer")){
@@ -93,8 +118,11 @@ public class JobData {
             theValue = job.getCoreCompetency().toString();
         }
 
+        // return job fields matching search criteria
         return theValue;
     }
+
+    // METHODS - RETURNS SEARCH RESULTS FOR SEARCH BY FIELD (ABOVE)
     /**
      * Search all Job fields for the given term.
      *
@@ -106,10 +134,14 @@ public class JobData {
         // load data, if not already loaded
         loadData();
 
+        // declare jobs arraylist to hold search results
         ArrayList<Job> jobs = new ArrayList<>();
 
+        // where value is the search term
+        // for each job in allJobs arraylist
         for (Job job : allJobs) {
 
+            // if the search term (value) matches a field in allJobs, add that job to the results (jobs arraylist)
             if (job.getName().toLowerCase().contains(value.toLowerCase())) {
                 jobs.add(job);
             } else if (job.getEmployer().toString().toLowerCase().contains(value.toLowerCase())) {
@@ -124,9 +156,11 @@ public class JobData {
 
         }
 
+        // returns list of all jobs with at least one field containing the value.
         return jobs;
     }
 
+    // METHODS - USED IN THE LOAD DATA METHOD (BELOW)
     private static Object findExistingObject(ArrayList list, String value){
         for (Object item : list){
             if (item.toString().toLowerCase().equals(value.toLowerCase())){
@@ -136,6 +170,8 @@ public class JobData {
         return null;
     }
 
+
+    // METHODS - LOAD DATA
     /**
      * Read in data from a CSV file and store it in an ArrayList of Job objects.
      */
@@ -206,6 +242,7 @@ public class JobData {
         }
     }
 
+    // GETTERS AND SETTERS
     public static ArrayList<Employer> getAllEmployers() {
         loadData();
         allEmployers.sort(new NameSorter());

@@ -19,9 +19,11 @@ import java.util.HashMap;
 @RequestMapping(value = "list")
 public class ListController {
 
+    // provides data in either a table or a list
     static HashMap<String, String> columnChoices = new HashMap<>();
     static HashMap<String, Object> tableChoices = new HashMap<>();
 
+    // a constructor that populates columnChoices and tableChoices with values
     public ListController () {
         columnChoices.put("all", "All");
         columnChoices.put("employer", "Employer");
@@ -29,12 +31,19 @@ public class ListController {
         columnChoices.put("positionType", "Position Type");
         columnChoices.put("coreCompetency", "Skill");
 
+        // Modify tableChoices in ListController to include another key/value pair.
+        // Check the method that renders the template to help identify the name to use
+        // for the key.
+
+        tableChoices.put("all", "All");
         tableChoices.put("employer", JobData.getAllEmployers());
         tableChoices.put("location", JobData.getAllLocations());
         tableChoices.put("positionType", JobData.getAllPositionTypes());
         tableChoices.put("coreCompetency", JobData.getAllCoreCompetency());
     }
 
+    // renders a view that displays a table of clickable links for the different job categories
+    // lives at /list
     @GetMapping(value = "")
     public String list(Model model) {
         model.addAttribute("columns", columnChoices);
@@ -44,9 +53,12 @@ public class ListController {
         model.addAttribute("positions", JobData.getAllPositionTypes());
         model.addAttribute("skills", JobData.getAllCoreCompetency());
 
+        // renders the list.html
         return "list";
     }
 
+    // renders a different view that displays information for the jobs that relate to a selected category
+    // lives at /list/jobs
     @GetMapping(value = "jobs")
     public String listJobsByColumnAndValue(Model model, @RequestParam String column, @RequestParam(required = false) String value) {
         ArrayList<Job> jobs;
@@ -59,6 +71,7 @@ public class ListController {
         }
         model.addAttribute("jobs", jobs);
 
+        // renders the list-jobs.html
         return "list-jobs";
     }
 }
